@@ -38,7 +38,7 @@ cells.append(md(
 
 cells.append(code(
     "#@title 0) Controls - set these, then `Runtime -> Run all`  { display-mode: \"form\" }\n",
-    "GIT_REPO_URL = \"https://github.com/<your-username>/doctrans\"  #@param {type:\"string\"}\n",
+    "GIT_REPO_URL = \"https://github.com/ledinhminhquan/doctrans\"  #@param {type:\"string\"}\n",
     "GIT_BRANCH   = \"main\"  #@param {type:\"string\"}\n",
     "USE_DRIVE    = True     #@param {type:\"boolean\"}\n",
     "DRIVE_SUBDIR = \"doctrans\"  #@param {type:\"string\"}\n",
@@ -89,7 +89,7 @@ cells.append(code(
     "os.chdir('/content')\n",
     "if os.path.isdir('/content/doctrans'):\n",
     "    os.chdir('/content/doctrans'); os.system('git pull')\n",
-    "elif GIT_REPO_URL and '<your-username>' not in GIT_REPO_URL:\n",
+    "elif GIT_REPO_URL and 'ledinhminhquan' not in GIT_REPO_URL:\n",
     "    os.system(f'git clone -b {GIT_BRANCH} {GIT_REPO_URL} /content/doctrans'); os.chdir('/content/doctrans')\n",
     "else:\n",
     "    drive_src = f'/content/drive/MyDrive/{DRIVE_SUBDIR}/doctrans'\n",
