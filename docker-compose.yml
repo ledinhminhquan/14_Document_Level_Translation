@@ -1,0 +1,31 @@
+services:
+  doctrans-api:
+    build: .
+    image: doctrans:latest
+    ports:
+      - "8000:8000"   # REST API (+ /ui demo)
+    environment:
+      - DOCTRANS_ARTIFACTS_DIR=/data/artifacts
+      - HF_HOME=/data/hf_cache
+      - DOCTRANS_INFER_CONFIG=/app/configs/infer.yaml
+      # - DOCTRANS_LLM_API_KEY=...   # optional terminology brain (off by default)
+    volumes:
+      - doctrans-data:/data
+    restart: unless-stopped
+
+  doctrans-demo:
+    build: .
+    image: doctrans:latest
+    command: ["python", "app/gradio_app.py"]
+    ports:
+      - "7860:7860"
+    environment:
+      - DOCTRANS_ARTIFACTS_DIR=/data/artifacts
+      - HF_HOME=/data/hf_cache
+      - PORT=7860
+    volumes:
+      - doctrans-data:/data
+    restart: unless-stopped
+
+volumes:
+  doctrans-data:

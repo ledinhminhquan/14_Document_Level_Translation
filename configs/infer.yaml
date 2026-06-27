@@ -1,0 +1,37 @@
+# Inference / serving config. Loads the trained MT core; structure layer is deterministic.
+project_title: Structured Document-Level Translation System
+author: Le Dinh Minh Quan
+student_id: "23127460"
+
+data:
+  src_lang: en
+  tgt_lang: fr
+  use_hf: true
+
+mt:
+  base_model: facebook/m2m100_418M
+  src_lang: en
+  tgt_lang: fr
+  num_beams: 4
+  context_k_infer: 2
+  use_context: true        # set true only when the loaded model was context-fine-tuned
+  brk_token: "<BRK>"
+
+doc:
+  sentinel_format: "[[PH{}]]"
+  mask_code: true
+  mask_urls: true
+  mask_placeholders: true
+  mask_html_tags: true
+
+agent:
+  min_letter_ratio: 0.30
+  verify_enabled: true
+  verify_min_chrf: 0.30
+  max_retranslate: 2
+  max_repair: 1
+  llm_fallback_enabled: false   # set true + DOCTRANS_LLM_API_KEY for the terminology brain
+
+serving:
+  model_version: v1
+  log_requests: true

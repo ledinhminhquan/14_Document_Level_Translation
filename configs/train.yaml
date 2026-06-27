@@ -1,0 +1,58 @@
+# Training config for the MT core (the only trainable stage) + document-level context.
+project_title: Structured Document-Level Translation System
+author: Le Dinh Minh Quan
+student_id: "23127460"
+
+data:
+  mt_dataset: Helsinki-NLP/opus-100      # en-fr; license unknown flag (fine-tune corpus)
+  mt_config: en-fr
+  context_dataset: Helsinki-NLP/news_commentary   # monotonic per-article id -> real adjacency
+  context_config: en-fr
+  src_lang: en
+  tgt_lang: fr
+  use_hf: true
+  max_train_samples: 40000
+  max_eval_samples: 2000
+  seed: 42
+
+mt:
+  base_model: facebook/m2m100_418M       # MIT, 1024 positions. alt nllb-200-distilled-600M (CC-BY-NC flag)
+  src_lang: en
+  tgt_lang: fr
+  max_source_length: 256
+  max_target_length: 160
+  num_beams: 4
+  context_k_train: 2                      # concat-k document context at train time
+  context_k_infer: 2
+  use_context: true                       # this model is context-trained -> use context at inference
+  brk_token: "<BRK>"
+  num_train_epochs: 3
+  learning_rate: 3.0e-5
+  per_device_train_batch_size: 16
+  weight_decay: 0.01
+  warmup_ratio: 0.05
+  label_smoothing: 0.1
+  bf16: true
+  fp16: false
+  tf32: true
+  eval_steps: 500
+  save_steps: 500
+  seed: 42
+
+doc:
+  sentinel_format: "[[PH{}]]"
+  mask_code: true
+  mask_urls: true
+  mask_placeholders: true
+  mask_html_tags: true
+  mask_numbers: false
+
+agent:
+  min_letter_ratio: 0.30
+  length_ratio_low: 0.4
+  length_ratio_high: 3.0
+  verify_enabled: true
+  verify_min_chrf: 0.30
+  max_retranslate: 2
+  max_repair: 1
+  llm_fallback_enabled: false

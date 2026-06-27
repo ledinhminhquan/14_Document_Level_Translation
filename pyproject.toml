@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doctrans"
+version = "1.0.0"
+description = "Structured Document-Level Translation — parse/mask/translate-with-context/reassemble/validate a Markdown/HTML/JSON document with a trainable MT core, structure preserved, gated by a deterministic agent (D1-D5)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Le Dinh Minh Quan" }]
+keywords = ["nlp", "machine-translation", "document-translation", "localization", "structure-preservation",
+            "context-aware-nmt", "markdown", "html", "m2m100", "agent"]
+
+# Core deps only — the package, the dictionary MT baseline, the line/regex structure
+# parsers, the agent, and the metrics all run with just these (no torch). Heavy ML /
+# parser / serving libs are extras, imported lazily.
+dependencies = [
+    "numpy>=1.23",
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+    "scikit-learn>=1.2",
+    "joblib>=1.3",
+]
+
+[project.optional-dependencies]
+ml = ["torch>=2.1", "transformers>=4.40", "datasets>=2.18", "accelerate>=0.30", "sentencepiece>=0.1.99", "sacrebleu>=2.3"]
+parsers = ["markdown-it-py>=3.0", "beautifulsoup4>=4.12", "python-docx>=1.1"]
+api = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "gradio>=4.0", "python-multipart>=0.0.9"]
+report = ["reportlab>=4.0", "python-pptx>=0.6.23", "matplotlib>=3.7"]
+dev = ["pytest>=7.4", "ruff>=0.4"]
+all = [
+    "torch>=2.1", "transformers>=4.40", "datasets>=2.18", "accelerate>=0.30", "sentencepiece>=0.1.99", "sacrebleu>=2.3",
+    "markdown-it-py>=3.0", "beautifulsoup4>=4.12", "python-docx>=1.1",
+    "fastapi>=0.110", "uvicorn[standard]>=0.29", "gradio>=4.0", "python-multipart>=0.0.9",
+    "reportlab>=4.0", "python-pptx>=0.6.23", "matplotlib>=3.7",
+]
+
+[project.scripts]
+doctrans = "doctrans.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+doctrans = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
